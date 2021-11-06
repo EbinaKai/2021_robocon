@@ -130,6 +130,11 @@ int main()
                 output(motor_output[i],i);
             }
 
+            if(r > 0.15){
+                Digital[3] = 0;
+                Pwm[3] = 0.05;
+            }
+
             //羽オンオフ制御
             if(wire.data[B2] & R1) {
                 if(wire.data[B1] & TRIANGLE) {
