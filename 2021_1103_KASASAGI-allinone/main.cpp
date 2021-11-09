@@ -98,7 +98,7 @@ int main()
             //初期位置誤差吸収
             if (X < sensitivity && X > sensitivity) X = 0;
             if (Y < sensitivity && Y > sensitivity) Y = 0;
-            if (angle < sensitivity && angle > sensitivity) Y = 0;
+            if (angle < sensitivity && angle > sensitivity) angle = 0;
 
             //台形制御
             if(abs(X-current_X)<0.11) {
@@ -130,38 +130,36 @@ int main()
                 output(motor_output[i],i);
             }
 
-            if(r > 0.15){
-                Digital[3] = 0;
-                Pwm[3] = 0.05;
-            }
-
             //羽オンオフ制御
             if(wire.data[B2] & R1) {
                 if(wire.data[B1] & TRIANGLE) {
                     Digital[3] = 1;
-                    Pwm[3] = 1 - WINGSPEED;
-                    printf("wing open\n");
+                    Pwm[3] = 1 - ARMSPEED;
+                    printf("arm close\n");
                 } else {
                     Digital[3] = 0;
-                    Pwm[3] = WINGSPEED;
-                    printf("wing close\n");
+                    Pwm[3] = ARMSPEED;
+                    printf("arm open\n");
                 }
             } else {
                 Digital[3] = 0;
                 Pwm[3] = 0;
             }
 
-            //腕の制御
+            //羽オンオフ制御≈
             if(wire.data[B2] & L1) {
                 if(wire.data[B1] & TRIANGLE) {
-                    Digital[4] = 0;
-                    Pwm[4] = ARMSPEED;
-                    printf("arm open\n");
-                } else {
                     Digital[4] = 1;
-                    Pwm[4] = 1 - ARMSPEED;
-                    printf("arm close\n");
+                    Pwm[4] = 1 - WINGSPEED;
+                    printf("wing close\n");
+                } else {
+                    Digital[4] = 0;
+                    Pwm[4] = WINGSPEED;
+                    printf("wing open\n");
                 }
+            } else if(r > 0.15){
+                Digital[4] = 1;
+                Pwm[4] = 0.8;
             } else {
                 Digital[4] = 0;
                 Pwm[4] = 0;
